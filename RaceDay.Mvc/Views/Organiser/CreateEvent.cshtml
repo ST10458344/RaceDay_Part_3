@@ -1,0 +1,96 @@
+﻿@model RaceDay.Mvc.Models.CreateEventViewModel
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container py-5">
+    <h1 class="fw-bold">Create Race Event</h1>
+    <p class="text-muted">
+        Enter the details of your new RaceDay event.
+    </p>
+
+    <form asp-controller="Organiser"
+          asp-action="CreateEvent"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description"
+                      class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="EventDate" class="form-label"></label>
+                <input asp-for="EventDate"
+                       type="date" class="form-control" />
+                <span asp-validation-for="EventDate"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="StartTime" class="form-label"></label>
+                <input asp-for="StartTime"
+                       type="time" class="form-control" />
+                <span asp-validation-for="StartTime"
+                      class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Location" class="form-label"></label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="RouteDescription"
+                   class="form-label"></label>
+            <textarea asp-for="RouteDescription"
+                      class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MaxParticipants"
+                   class="form-label"></label>
+            <input asp-for="MaxParticipants"
+                   type="number" min="1" class="form-control" />
+            <span asp-validation-for="MaxParticipants"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-4">
+            <input asp-for="IsPublished"
+                   class="form-check-input" />
+            <label asp-for="IsPublished"
+                   class="form-check-label"></label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Create Event
+        </button>
+
+        <a asp-action="Events"
+           asp-controller="Organiser"
+           class="btn btn-outline-secondary ms-2">
+            Cancel
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

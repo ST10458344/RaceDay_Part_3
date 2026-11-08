@@ -1,0 +1,83 @@
+﻿@using System.Text.Json
+
+@{
+    ViewData["Title"] = "My Enrolments";
+    var json = ViewBag.EnrolmentsJson as string;
+}
+
+<h2>My Enrolments</h2>
+
+<p>View the races you have registered for.</p>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+else if (string.IsNullOrEmpty(json))
+{
+    <p>No enrolment information is available.</p>
+}
+else
+{
+    using var document = JsonDocument.Parse(json);
+    var enrolments = document.RootElement;
+
+    if (enrolments.GetArrayLength() == 0)
+    {
+        <div class="alert alert-info">
+            You haven't enrolled in any races yet.
+        </div>
+
+        <a asp-controller="Events"
+           asp-action="Index"
+           class="btn btn-primary">
+            Browse Events
+        </a>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Category</th>
+                        <th>Distance</th>
+                        <th>Status</th>
+                        <th>Bib Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var enrolment in
+                        enrolments.EnumerateArray())
+                    {
+                        <tr>
+                            <td>
+                                @enrolment.GetProperty(
+                                    "eventName").GetString()
+                            </td>
+                            <td>
+                                @enrolment.GetProperty(
+                                    "categoryName").GetString()
+                            </td>
+                            <td>
+                                @enrolment.GetProperty(
+                                    "distanceKm").GetDecimal() km
+                            </td>
+                            <td>
+                                @enrolment.GetProperty(
+                                    "status").GetString()
+                            </td>
+                            <td>
+                                @enrolment.GetProperty(
+                                    "bibNumber").ToString()
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

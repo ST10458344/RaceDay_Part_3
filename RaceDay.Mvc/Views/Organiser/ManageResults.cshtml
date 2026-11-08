@@ -1,0 +1,174 @@
+﻿@model RaceDay.Mvc.Models.ManageResultsViewModel
+
+@{
+    ViewData["Title"] = "Manage Race Results";
+}
+
+<div class="container py-5">
+
+    <h1 class="fw-bold">Manage Race Results</h1>
+
+    <p class="text-muted">
+        View enrolled participants and record their finishing results.
+    </p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (!Model.Enrolments.Any())
+    {
+        <div class="alert alert-info">
+            No participants have enrolled in this event yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Participant</th>
+                        <th>Bib</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var enrolment in Model.Enrolments)
+                    {
+                        <tr>
+                            <td>@enrolment.ParticipantName</td>
+
+                            <td>
+                                @(enrolment.BibNumber ?? "Not assigned")
+                            </td>
+
+                            <td>@enrolment.CategoryName</td>
+
+                            <td>@enrolment.Status</td>
+
+                            <td>
+                                @if (enrolment.Result != null)
+                                {
+                                    <span class="badge bg-success">
+                                        Recorded
+                                    </span>
+
+                                    <div class="mt-2">
+                                        Time:
+                                        @enrolment.Result.FinishTime.ToString(@"hh\:mm\:ss")
+                                    </div>
+
+                                    <div>
+                                        Overall:
+                                        @(enrolment.Result.PositionOverall?.ToString() ?? "-")
+                                    </div>
+
+                                    <div>
+                                        Category:
+                                        @(enrolment.Result.PositionCategory?.ToString() ?? "-")
+                                    </div>
+                                }
+                                else if (enrolment.Status == "Confirmed")
+                                {
+                                    <form asp-controller="Organiser"
+                                          asp-action="RecordResult"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="EventId"
+                                               value="@Model.EventId" />
+
+                                        <input type="hidden"
+                                               name="EnrolmentId"
+                                               value="@enrolment.EnrolmentId" />
+
+                                        <div class="mb-2">
+                                            <label class="form-label">
+                                                Finish Time
+                                            </label>
+
+                                            <input type="text"
+                                                   name="FinishTime"
+                                                   class="form-control"
+                                                   placeholder="00:32:15"
+                                                   pattern="[0-9]{2}:[0-5][0-9]:[0-5][0-9]"
+                                                   title="Enter HH:mm:ss"
+                                                   required />
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label class="form-label">
+                                                Overall Position
+                                            </label>
+
+                                            <input type="number"
+                                                   name="PositionOverall"
+                                                   min="1"
+                                                   class="form-control" />
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label class="form-label">
+                                                Category Position
+                                            </label>
+
+                                            <input type="number"
+                                                   name="PositionCategory"
+                                                   min="1"
+                                                   class="form-control" />
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label class="form-label">
+                                                Notes
+                                            </label>
+
+                                            <input type="text"
+                                                   name="Notes"
+                                                   maxlength="500"
+                                                   class="form-control" />
+                                        </div>
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-primary">
+                                            Save Result
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Not eligible
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <a asp-controller="Organiser"
+       asp-action="Events"
+       class="btn btn-outline-secondary mt-3">
+        Back to Manage Events
+    </a>
+
+</div>

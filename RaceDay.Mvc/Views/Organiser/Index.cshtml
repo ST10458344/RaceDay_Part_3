@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Organiser Dashboard";
+}
+
+<div class="container py-5">
+
+    <h1 class="fw-bold">Organiser Dashboard</h1>
+
+    <p class="lead text-muted">
+        Manage your RaceDay events and participants.
+    </p>
+
+    <div class="row g-4 mt-3">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Manage Events</h5>
+                    <p>Create, edit and publish race events.</p>
+                    <a asp-controller="Organiser"
+                       asp-action="Events"
+                       class="btn btn-primary">
+                        Manage Events
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Participant Enrolments</h5>
+                    <p>View participants registered for your events.</p>
+                    <span class="text-muted">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Race Results</h5>
+                    <p>Record and manage race results.</p>
+                    <span class="text-muted">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

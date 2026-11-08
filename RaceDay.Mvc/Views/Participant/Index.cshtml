@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Participant Dashboard";
+}
+
+<div class="container mt-4">
+
+    <div class="bg-dark text-white p-4 rounded-3 mb-4">
+        <h1 class="fw-bold">Participant Dashboard</h1>
+        <p class="mb-0">
+            Welcome to RaceDay! Discover upcoming events,
+            manage your enrolments and track your race results.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Browse Events -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>Browse Events</h4>
+                    <p>
+                        Explore upcoming running, walking
+                        and cycling events.
+                    </p>
+
+                    <a asp-controller="Events"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Browse Events
+                    </a>
+
+                    <a asp-controller="Participant"
+                       asp-action="MyResults"
+                       class="btn btn-outline-success">
+                        My Race Results
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Enrolments -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>My Enrolments</h4>
+                    <p>
+                        View races you have registered for
+                        and check their enrolment status.
+                    </p>
+                    <span class="badge bg-secondary">
+                        Coming Soon
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Race Results -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4>Race Results</h4>
+                    <p>
+                        View your previous race results
+                        and participation history.
+                    </p>
+                    <span class="badge bg-secondary">
+                        Coming Soon
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

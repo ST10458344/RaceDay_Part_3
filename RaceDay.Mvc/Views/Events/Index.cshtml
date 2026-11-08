@@ -1,0 +1,154 @@
+﻿@model List<RaceDay.Mvc.Models.EventViewModel>
+
+@{
+    ViewData["Title"] = "Browse Events";
+}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">RaceDay Events</h1>
+        <p class="lead text-muted">
+            Discover upcoming running, walking and cycling events.
+        </p>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-warning">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    else if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No upcoming events are available yet.
+            Check back soon!
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var raceEvent in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+
+                            <h5 class="card-title fw-bold">
+                                @raceEvent.Name
+                            </h5>
+
+                            <p class="card-text">
+                                @raceEvent.Description
+                            </p>
+
+                            <p>
+                                <strong>Date:</strong>
+                                @raceEvent.EventDate.ToString("dd MMM yyyy")
+                            </p>
+
+                            <p>
+                                <strong>Location:</strong>
+                                @raceEvent.Location
+                            </p>
+
+                            <p>
+                                <strong>Start:</strong>
+                                @raceEvent.StartTime.ToString(@"hh\:mm")
+                            </p>
+
+                            <hr />
+
+                            <h6 class="fw-bold">Race Categories</h6>
+
+                            @if (raceEvent.Categories == null ||
+                                                !raceEvent.Categories.Any())
+                            {
+                                <p class="text-muted">
+                                    No race categories available yet.
+                                </p>
+                            }
+                            else
+                            {
+                                @foreach (var category in raceEvent.Categories)
+                                {
+                                    <div class="border rounded p-3 mb-3">
+
+                                        <h6>@category.Name</h6>
+
+                                        <p class="mb-1">
+                                            Distance:
+                                            @category.DistanceKm km
+                                        </p>
+
+                                        <p class="mb-2">
+                                            Entry Fee:
+                                            @category.EntryFee.ToString("C",
+                                            System.Globalization.CultureInfo
+                                            .GetCultureInfo("en-ZA"))
+                        </p>
+
+                        @if (User.Identity?.IsAuthenticated == true &&
+                                                User.IsInRole("Participant"))
+                                        {
+                                            <form asp-controller="Enrolments"
+                                                  asp-action="Create"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="categoryId"
+                                                       value="@category.CategoryId" />
+
+                                                <div class="mb-2">
+                                                    <label class="form-label">
+                                                        Emergency Contact
+                                                    </label>
+
+                                                    <input type="text"
+                                                           name="emergencyContact"
+                                                           class="form-control"
+                                                           maxlength="150"
+                                                           placeholder="Optional" />
+                                                </div>
+
+                                                <button type="submit"
+                                                        class="btn btn-success w-100">
+                                                    Enrol Now
+                                                </button>
+                                            </form>
+                                        }
+                                        else if (User.Identity?.IsAuthenticated != true)
+                                        {
+                                            <a asp-controller="Account"
+                                               asp-action="Login"
+                                               class="btn btn-outline-primary w-100">
+                                                Login to Enrol
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

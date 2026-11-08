@@ -1,0 +1,159 @@
+﻿@model List<RaceDay.Mvc.Models.EventViewModel>
+
+@{
+    ViewData["Title"] = "Manage Events";
+}
+
+<div class="container py-5">
+
+    <h1 class="fw-bold">Manage Events</h1>
+
+    <p class="text-muted">
+        View and manage the race events you have created.
+    </p>
+
+    <a asp-controller="Organiser"
+       asp-action="CreateEvent"
+       class="btn btn-primary mb-4">
+        + Create New Event
+    </a>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-warning">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    else if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You have not created any events yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Categories</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var raceEvent in Model)
+                    {
+                        <tr>
+                            <!-- Event Name -->
+                            <td>
+                                @raceEvent.Name
+                            </td>
+
+                            <!-- Event Date -->
+                            <td>
+                                @raceEvent.EventDate.ToString("dd MMM yyyy")
+                            </td>
+
+                            <!-- Event Location -->
+                            <td>
+                                @raceEvent.Location
+                            </td>
+
+                            <!-- Event Status -->
+                            <td>
+                                @if (raceEvent.IsPublished)
+                                {
+                                    <span class="badge bg-success">
+                                        Published
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Draft
+                                    </span>
+                                }
+                            </td>
+
+                            <!-- Race Categories -->
+                            <td>
+                                @if (raceEvent.Categories != null &&
+                                                        raceEvent.Categories.Any())
+                                {
+                                    @foreach (var category in raceEvent.Categories)
+                                    {
+                                        <div class="mb-2">
+                                            <strong>
+                                                @category.Name
+                                            </strong>
+
+                                            <div class="small text-muted">
+                                                @category.DistanceKm.ToString("0.##") km
+                                                |
+                                                R @category.EntryFee.ToString("0.00")
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        No categories yet
+                                    </span>
+                                }
+                            </td>
+
+                            <!-- Event Actions -->
+                            <td>
+                                <div class="d-flex flex-column gap-2">
+
+                                    <a asp-controller="Organiser"
+                                       asp-action="EditEvent"
+                                       asp-route-eventId="@raceEvent.EventId"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Edit Event
+                                    </a>
+
+                                    <a asp-controller="Organiser"
+                                       asp-action="CreateCategory"
+                                       asp-route-eventId="@raceEvent.EventId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Add Category
+                                    </a>
+
+                                    <a asp-controller="Organiser"
+                                       asp-action="ManageResults"
+                                       asp-route-eventId="@raceEvent.EventId"
+                                       class="btn btn-sm btn-outline-success">
+                                        Manage Results
+                                    </a>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <a asp-controller="Organiser"
+       asp-action="Index"
+       class="btn btn-outline-secondary mt-3">
+        Back to Dashboard
+    </a>
+
+</div>

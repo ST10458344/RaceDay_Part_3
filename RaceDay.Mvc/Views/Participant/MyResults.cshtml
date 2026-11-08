@@ -1,0 +1,104 @@
+﻿@model List<RaceDay.Mvc.Models.ParticipantResultViewModel>
+
+@{
+    ViewData["Title"] = "My Race Results";
+}
+
+<div class="container py-5">
+
+    <h1 class="fw-bold">My Race Results</h1>
+
+    <p class="text-muted">
+        View your race finishing times and positions.
+    </p>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    else if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You have not enrolled in any race events yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table table-striped align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Race Event</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Finish Time</th>
+                        <th>Overall Position</th>
+                        <th>Category Position</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var race in Model)
+                    {
+                        <tr>
+                            <td>@race.EventName</td>
+
+                            <td>
+                                @race.EventDate.ToString("dd MMM yyyy")
+                            </td>
+
+                            <td>@race.CategoryName</td>
+
+                            @if (race.Result != null)
+                            {
+                                <td>
+                                    @race.Result.FinishTime.ToString(@"hh\:mm\:ss")
+                                </td>
+
+                                <td>
+                                    @(race.Result.PositionOverall?.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @(race.Result.PositionCategory?.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-success">
+                                        Completed
+                                    </span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+
+                                <td>
+                                    <span class="badge bg-warning text-dark">
+                                        Awaiting Result
+                                    </span>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+    <a asp-controller="Participant"
+       asp-action="Index"
+       class="btn btn-outline-secondary mt-3">
+        Back to Dashboard
+    </a>
+
+</div>

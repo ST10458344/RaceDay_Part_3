@@ -1,0 +1,35 @@
+﻿name: .NET Core Build and Test
+
+# Defines when this workflow will trigger
+on:
+  push:
+    branches: [ "main", "part2" ]
+  pull_request:
+    branches: [ "main", "part2" ]
+
+jobs:
+  build:
+    # Specifies the virtual operating system runner provided by GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out your repository code onto the runner machine
+    - uses: actions/checkout@v3
+
+    # Step 2: Install and configure the .NET SDK on the runner
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    # Step 3: Download and restore all required NuGet packages
+    - name: Restore dependencies
+      run: dotnet restore RaceDay.sln
+
+    # Step 4: Compile/build the solution to check for syntax or build errors
+    - name: Build
+      run: dotnet build RaceDay.sln --no-restore --configuration Release
+
+    # Step 5: Execute all unit tests in the RaceDay.Tests project
+    - name: Test
+      run: dotnet test RaceDay.sln --no-build --configuration Release --verbosity normal

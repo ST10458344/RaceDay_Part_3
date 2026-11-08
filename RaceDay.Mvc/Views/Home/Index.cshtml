@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="bg-dark text-white text-center py-5 rounded-3">
+    <div class="container py-5">
+        <h1 class="display-3 fw-bold">Welcome to RaceDay</h1>
+
+        <p class="lead mt-3">
+            Discover, join and experience South Africa's
+            running, walking and cycling events.
+        </p>
+
+        <a asp-controller="Events"
+           asp-action="Index"
+           class="btn btn-success btn-lg mt-4">
+            Browse Events
+        </a>
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Find Your Next Challenge</h2>
+        <p class="text-muted">
+            Whatever your fitness interests, RaceDay has
+            something for you.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <h3>🏃 Running</h3>
+                    <p>
+                        Explore running events and challenge
+                        yourself on exciting routes.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <h3>🚶 Walking</h3>
+                    <p>
+                        Enjoy walking events for different
+                        distances and experience levels.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <h3>🚴 Cycling</h3>
+                    <p>
+                        Discover cycling challenges and
+                        connect with fellow riders.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-light text-center py-5 rounded-3">
+    <h2 class="fw-bold">Ready for RaceDay?</h2>
+    <p>Find your next event and start your journey.</p>
+
+    <a asp-controller="Events"
+       asp-action="Index"
+       class="btn btn-dark btn-lg">
+        Explore Events
+    </a>
+</section>
